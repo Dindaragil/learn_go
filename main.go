@@ -1,7 +1,8 @@
 package main
 
 import (
-	"net/http"
+	"learn_go/controllers"
+	"learn_go/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,9 +10,9 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "Hello World!"})
-	})
+	models.ConnectDatabase()
+
+	r.GET("/books", controllers.FindBooks)
 
 	r.Run()
 }
