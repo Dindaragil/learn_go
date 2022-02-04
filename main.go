@@ -12,6 +12,7 @@ func main() {
 	models.InitialMigration()
 
 	r.POST("/register", controllers.Register)
+	r.POST("/login", controllers.Login)
 
 	r.GET("/books", controllers.FindBooks)
 	r.POST("/books", controllers.CreateBook)
