@@ -1,16 +1,21 @@
 package models
 
 import (
+	"time"
+
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
 type Book struct {
-	ID          uuid.UUID `json:"id" gorm:"type:uuid;primary_key"`
-	Title       string    `json:"title"`
-	Author      string    `json:"author"`
-	Quantity    uint      `json:"quantity"`
-	IsAvailable bool      `json:"isAvailable"`
+	ID          uuid.UUID  `json:"id" gorm:"type:uuid;primary_key;"`
+	Title       string     `json:"title"`
+	Author      string     `json:"author"`
+	Quantity    uint       `json:"quantity"`
+	IsAvailable bool       `json:"isAvailable"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `sql:"index" json:"deleted_at"`
 }
 
 type CreateBookInput struct {

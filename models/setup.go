@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+	"log"
+
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -8,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDatabase() {
+func ConnectDatabase() *gorm.DB {
 	var err error
 
 	Dsn := "host=localhost port=5432 user=postgres dbname=learn_go password=Mieayamkantin4 sslmode=disable"
@@ -16,7 +19,28 @@ func ConnectDatabase() {
 	if err != nil {
 		panic(err)
 	}
-	database.AutoMigrate(&Book{})
+	sqldb, _ := database.DB()
 
-	DB = database
+	err = sqldb.Ping()
+	if err != nil {
+		log.Fatal("database connected")
+	}
+
+	fmt.Println("connected to database")
+	return database
+	// database.AutoMigrate(&Book{}, &User{})
+
+	// DB = database
+}
+
+func InitialMigration() {
+	database := ConnectDatabase()
+	defer Closedatabase(database)
+	database.AutoMigrate(&Book{})
+	database.AutoMigrate(&User{})
+}
+
+func Closedatabase(database *gorm.DB) {
+	sqldb, _ := database.DB()
+	sqldb.Close()
 }
