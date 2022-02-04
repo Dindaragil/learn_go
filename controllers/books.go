@@ -78,10 +78,18 @@ func UpdateBook(c *gin.Context) {
 	}
 
 	var input models.UpdateBookInput
-	// if err := c.ShouldBindJSON(&input); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// }
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	database.Model(&book).Updates(&input)
+	println(*input.IsAvailable)
+
+	database.Model(&book).Updates(&models.Book{
+		Title:       input.Title,
+		Author:      input.Author,
+		Quantity:    input.Quantity,
+		IsAvailable: input.IsAvailable,
+	})
 	c.JSON(http.StatusOK, gin.H{"data": book})
 }
